@@ -24,3 +24,19 @@ for u, v, data in G.edges(data=True):
 
 print("Safety weights added! ✅")
 print("Sample edge data:", list(G.edges(data=True))[0])
+
+# Find safest path between two points
+print("\nFinding safest path...")
+
+# Pick any two random nodes from Delhi map
+all_nodes = list(G.nodes)
+start_node = all_nodes[0]
+end_node = all_nodes[100]
+
+# Dijkstra algorithm — finds path with lowest safety_weight
+safest_path = nx.dijkstra_path(G, start_node, end_node, weight='safety_weight')
+
+print("Start Node:", start_node)
+print("End Node:", end_node)
+print("Safest Path (node IDs):", safest_path)
+print("Total nodes in path:", len(safest_path))
