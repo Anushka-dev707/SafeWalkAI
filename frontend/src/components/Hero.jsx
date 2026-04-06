@@ -6,8 +6,6 @@ export default function Hero() {
         SafeWalk AI analyzes lighting, crowd density, and safety data
         to guide you through the safest routes.
       </p>
-
-      <button className="primary-btn">Plan Safe Route</button>
     </div>
   );
 }

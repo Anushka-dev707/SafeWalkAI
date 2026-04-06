@@ -1,7 +1,19 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background: #f6f8f9;
+  background: transparent;
+}
+/* FULL SCREEN BACKGROUND */
+.app-bg {
+  min-height: 100vh;
+  width: 100%;  
+  background: linear-gradient(to bottom, #B5D8EB, #F4F8FB);
+}
+
+/* CONTENT CENTERED */
+.app-content {
+ width: 100%;
+  margin: 0;
 }
 
 .navbar {
@@ -30,12 +42,16 @@ body {
 .hero h1 {
   font-size: 40px;
   font-weight: bold;
+  color: #0f2a44; /* deep blue instead of black */
+  animation: fadeSlideUp 1s ease forwards;
 }
 
 .hero p {
-  color: gray;
+  color: #4f6f8f; /* soft bluish grey */
   margin-top: 10px;
+  animation: fadeSlideUp 1.5s ease forwards;
 }
+
 
 .primary-btn {
   margin-top: 20px;
@@ -60,6 +76,11 @@ body {
   width: 90%;
   margin: 5px;
   padding: 10px;
+}
+.planner h2 i {
+  margin-right: 10px;
+  color: #1f7a63;
+  font-size: 30px;
 }
 
 .planner button {
@@ -125,7 +146,7 @@ body {
 }
 
 .feature-card p {
-  color: gray;
+  color: #4f6f8f;
 }
 
 /* .icon {
@@ -149,4 +170,33 @@ body {
 .icon img {
   width: 26px;
   height: 26px;
+}
+
+.links span {
+  margin-left: 20px;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.2s ease;
+}
+
+/* hover effect */
+.links span:hover {
+  color: #1f7a63;
+}
+
+/* remove blue click highlight */
+.links span:focus,
+.links span:active {
+  outline: none;
+  color: #1f7a63;
+}
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

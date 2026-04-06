@@ -137,6 +137,11 @@ export default function RoutePlanner({ setRoute }) {
 
       setRoute(res.data.safest_route);
 
+       // ✅ SCROLL TO MAP AFTER ROUTE LOADS
+    document.getElementById("map-section")?.scrollIntoView({
+      behavior: "smooth",
+    });
+
     } catch (err) {
       console.error(err);
       alert("Location not found or backend error!");
@@ -145,7 +150,9 @@ export default function RoutePlanner({ setRoute }) {
 
   return (
     <div className="planner">
-      <h2>Plan Your Route</h2>
+      <h2>
+    <i className="fa-solid fa-route"></i> Plan Your Route
+  </h2>
 
       {/* ✅ NEW INPUTS */}
       <input

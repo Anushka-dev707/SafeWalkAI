@@ -70,19 +70,35 @@ import Features from "./components/Features";
 import "./App.css";
 
 
+// function App() {
+//   const [route, setRoute] = useState([]);
+
+//   return (
+//     <>
+//       <Navbar />
+//       <Hero />
+//       <RoutePlanner setRoute={setRoute} />
+//       <MapView route={route} />
+
+//       {/* ADD THIS 👇 */}
+//       <Features />
+//     </>
+//   );
+// }
+// export default App;
 function App() {
   const [route, setRoute] = useState([]);
 
   return (
-    <>
-      <Navbar />
-      <Hero />
-      <RoutePlanner setRoute={setRoute} />
-      <MapView route={route} />
-
-      {/* ADD THIS 👇 */}
-      <Features />
-    </>
+    <div className="app-bg">
+      <div className="app-content">
+        <Navbar />
+        <Hero />
+        <RoutePlanner setRoute={setRoute} />
+        <MapView route={route} />
+        <Features />
+      </div>
+    </div>
   );
 }
 export default App;
