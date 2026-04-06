@@ -60,45 +60,88 @@
 
 // export default App;
 
+// import { useState } from "react";
+// import Navbar from "./components/Navbar";
+// import Hero from "./components/Hero";
+// import RoutePlanner from "./components/RoutePlanner";
+// import MapView from "./components/MapView";
+// import "leaflet/dist/leaflet.css";
+// import Features from "./components/Features";
+// import "./App.css";
+
+
+// // function App() {
+// //   const [route, setRoute] = useState([]);
+
+// //   return (
+// //     <>
+// //       <Navbar />
+// //       <Hero />
+// //       <RoutePlanner setRoute={setRoute} />
+// //       <MapView route={route} />
+
+// //       {/* ADD THIS 👇 */}
+// //       <Features />
+// //     </>
+// //   );
+// // }
+// // export default App;
+// function App() {
+//   const [route, setRoute] = useState([]);
+
+//   return (
+//     <div className="app-bg">
+//       <div className="app-content">
+//         <Navbar />
+//         <Hero />
+//         <RoutePlanner setRoute={setRoute} />
+//         <MapView route={route} />
+//         <Features />
+//       </div>
+//     </div>
+//   );
+// }
+// export default App;
+
+
 import { useState } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import RoutePlanner from "./components/RoutePlanner";
 import MapView from "./components/MapView";
-import "leaflet/dist/leaflet.css";
 import Features from "./components/Features";
+import "leaflet/dist/leaflet.css";
 import "./App.css";
 
-
-// function App() {
-//   const [route, setRoute] = useState([]);
-
-//   return (
-//     <>
-//       <Navbar />
-//       <Hero />
-//       <RoutePlanner setRoute={setRoute} />
-//       <MapView route={route} />
-
-//       {/* ADD THIS 👇 */}
-//       <Features />
-//     </>
-//   );
-// }
-// export default App;
 function App() {
-  const [route, setRoute] = useState([]);
+  const [safestRoute, setSafestRoute] = useState([]);
+  const [shortestRoute, setShortestRoute] = useState([]);
+  const [safetyScore, setSafetyScore] = useState(null);
 
   return (
     <div className="app-bg">
       <div className="app-content">
         <Navbar />
         <Hero />
-        <RoutePlanner setRoute={setRoute} />
-        <MapView route={route} />
+        <RoutePlanner
+          setSafestRoute={setSafestRoute}
+          setShortestRoute={setShortestRoute}
+          setSafetyScore={setSafetyScore}
+        />
+
+        {/* Safety Score Box */}
+        {safetyScore !== null && (
+          <div className="score-box">
+            <p>🛡️ Safety Score: <strong>{safetyScore} / 10</strong></p>
+            <p>🟢 Green = Safest Route &nbsp;|&nbsp; 🔴 Red = Shortest Route</p>
+          </div>
+        )}
+
+        <MapView safestRoute={safestRoute} shortestRoute={shortestRoute} />
         <Features />
       </div>
     </div>
   );
 }
+
 export default App;

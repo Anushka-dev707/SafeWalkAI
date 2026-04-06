@@ -95,17 +95,98 @@
 //   );
 // }
 
+// import { useState } from "react";
+// import axios from "axios";
+
+// export default function RoutePlanner({ setRoute }) {
+//   const [startPlace, setStartPlace] = useState("");
+//   const [endPlace, setEndPlace] = useState("");
+
+//   // 🔥 Convert place → coordinates
+//   const getCoordinates = async (place) => {
+//     const res = await fetch(
+//       `https://nominatim.openstreetmap.org/search?format=json&q=${place}`
+//     );
+//     const data = await res.json();
+
+//     if (data.length === 0) {
+//       throw new Error("Location not found");
+//     }
+
+//     return {
+//       lat: parseFloat(data[0].lat),
+//       lon: parseFloat(data[0].lon),
+//     };
+//   };
+
+//   const handleRoute = async () => {
+//     try {
+//       // 🔥 Step 1: Convert names → coords
+//       const start = await getCoordinates(startPlace);
+//       const end = await getCoordinates(endPlace);
+
+//       // 🔥 Step 2: Call backend (same as before)
+//       const res = await axios.get("http://localhost:8000/route", {
+//         params: {
+//           start_lat: start.lat,
+//           start_lon: start.lon,
+//           end_lat: end.lat,
+//           end_lon: end.lon,
+//         },
+//       });
+
+//       setRoute(res.data.safest_route);
+
+//        // ✅ SCROLL TO MAP AFTER ROUTE LOADS
+//     document.getElementById("map-section")?.scrollIntoView({
+//       behavior: "smooth",
+//     });
+
+//     } catch (err) {
+//       console.error(err);
+//       alert("Location not found or backend error!");
+//     }
+//   };
+
+//   return (
+//     <div className="planner">
+//       <h2>
+//     <i className="fa-solid fa-route"></i> Plan Your Route
+//   </h2>
+
+//       {/* ✅ NEW INPUTS */}
+//       <input
+//         placeholder="Enter Start Location (e.g. JNU)"
+//         onChange={(e) => setStartPlace(e.target.value)}
+//       />
+
+//       <input
+//         placeholder="Enter Destination (e.g. India Gate)"
+//         onChange={(e) => setEndPlace(e.target.value)}
+//       />
+
+//       <button onClick={handleRoute}>
+//         Find Safest Route
+//       </button>
+//     </div>
+//   );
+// }
+
+
+
+
 import { useState } from "react";
 import axios from "axios";
 
-export default function RoutePlanner({ setRoute }) {
+export default function RoutePlanner({ setSafestRoute, setShortestRoute, setSafetyScore }) {
   const [startPlace, setStartPlace] = useState("");
   const [endPlace, setEndPlace] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // 🔥 Convert place → coordinates
+  // Convert place → coordinates
   const getCoordinates = async (place) => {
     const res = await fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&q=${place}`
+      `https://nominatim.openstreetmap.org/search?format=json&q=${place}&countrycodes=in&viewbox=76.8,28.4,77.6,28.9&bounded=1`
     );
     const data = await res.json();
 
@@ -121,11 +202,11 @@ export default function RoutePlanner({ setRoute }) {
 
   const handleRoute = async () => {
     try {
-      // 🔥 Step 1: Convert names → coords
+      setLoading(true);
+
       const start = await getCoordinates(startPlace);
       const end = await getCoordinates(endPlace);
 
-      // 🔥 Step 2: Call backend (same as before)
       const res = await axios.get("http://localhost:8000/route", {
         params: {
           start_lat: start.lat,
@@ -135,26 +216,28 @@ export default function RoutePlanner({ setRoute }) {
         },
       });
 
-      setRoute(res.data.safest_route);
+      setSafestRoute(res.data.safest_route);
+      setShortestRoute(res.data.shortest_route);
+      setSafetyScore(res.data.safety_score);
 
-       // ✅ SCROLL TO MAP AFTER ROUTE LOADS
-    document.getElementById("map-section")?.scrollIntoView({
-      behavior: "smooth",
-    });
+      document.getElementById("map-section")?.scrollIntoView({
+        behavior: "smooth",
+      });
 
     } catch (err) {
       console.error(err);
       alert("Location not found or backend error!");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="planner">
       <h2>
-    <i className="fa-solid fa-route"></i> Plan Your Route
-  </h2>
+        <i className="fa-solid fa-route"></i> Plan Your Route
+      </h2>
 
-      {/* ✅ NEW INPUTS */}
       <input
         placeholder="Enter Start Location (e.g. JNU)"
         onChange={(e) => setStartPlace(e.target.value)}
@@ -165,8 +248,8 @@ export default function RoutePlanner({ setRoute }) {
         onChange={(e) => setEndPlace(e.target.value)}
       />
 
-      <button onClick={handleRoute}>
-        Find Safest Route
+      <button onClick={handleRoute} disabled={loading}>
+        {loading ? "Finding Route... ⏳" : "Find Safest Route"}
       </button>
     </div>
   );
