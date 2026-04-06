@@ -79,8 +79,9 @@ def get_routes(start_lat, start_lon, end_lat, end_lon):
         })
 
     return {
-        "safest_route": safest['route'],
-        "shortest_route": shortest_coords,
-        "safest_length": safest['total_stops'],
-        "shortest_length": len(shortest_coords)
+    "safest_route": safest['route'],
+    "shortest_route": shortest_coords,
+    "safest_length": safest['total_stops'],
+    "shortest_length": len(shortest_coords),
+    "safety_score": safest['safety_score']  # ← yeh add karo
     }

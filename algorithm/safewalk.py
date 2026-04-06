@@ -6,9 +6,9 @@ from math import radians, sin, cos, sqrt, atan2
 import os
 
 # Load crime data from CSV
-# Get the directory where safewalk.py is located
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 safety_data = pd.read_csv(os.path.join(BASE_DIR, "final_dataset.csv"))
+
 
 def get_crime_score(lat, lon):
     """Find nearest area and return its crime score"""
@@ -85,6 +85,21 @@ def get_safest_route(start_lat, start_lon, end_lat, end_lon, G):
 
     safest_path = nx.dijkstra_path(G, start_node, end_node, weight='safety_weight')
 
+    # Calculate average safety score of the route
+    total_safety = 0
+    for i in range(len(safest_path) - 1):
+        u = safest_path[i]
+        v = safest_path[i + 1]
+        edge_data = G.get_edge_data(u, v)
+        if edge_data:
+            total_safety += edge_data[0].get('safety_weight', 0.5)
+
+    avg_safety = total_safety / max(len(safest_path) - 1, 1)
+
+    # Convert to score out of 10 (lower weight = safer = higher score)
+    safety_score = round((1 - avg_safety) * 10, 1)
+
+    # Convert node IDs to coordinates
     coordinates = []
     for node in safest_path:
         coordinates.append({
@@ -96,6 +111,7 @@ def get_safest_route(start_lat, start_lon, end_lat, end_lon, G):
         "start": {"lat": start_lat, "lon": start_lon},
         "end": {"lat": end_lat, "lon": end_lon},
         "total_stops": len(coordinates),
+        "safety_score": safety_score,
         "route": coordinates
     }
 
@@ -112,4 +128,5 @@ if __name__ == "__main__":
 
     print("\nRoute Found! ✅")
     print("Total stops:", result['total_stops'])
+    print("Safety Score:", result['safety_score'], "/ 10")
     print("First 3 coordinates:", result['route'][:3])
