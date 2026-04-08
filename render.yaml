@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: safewalk-backend
+    runtime: python
+    rootDir: SafeWalk/backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port 8000
+    envVars:
+      - key: FRONTEND_URL
+        scope: build,runtime
+        value: ${FRONTEND_URL}
+
+  - type: static
+    name: safewalk-frontend
+    rootDir: SafeWalk/frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        scope: build
+        value: https://${RENDER_EXTERNAL_HOSTNAME}
+
+databases:
+  - name: safewalk-db
+    databaseName: safewalk
+    user: safewalk_user
+
+envVars:
+  - key: FRONTEND_URL
+    scope: build,runtime

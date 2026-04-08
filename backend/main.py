@@ -1,13 +1,30 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from services.route_service import get_routes
+import os
 
-app = FastAPI()
+app = FastAPI(
+    title="SafeWalk API",
+    description="AI-powered safe route recommendation system",
+    version="1.0.0"
+)
 
-# allow frontend
+# CORS Configuration - Allow frontend domains
+allowed_origins = [
+    "http://localhost:3000",      # Local React dev
+    "http://localhost:5173",      # Local Vite dev
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:5173",
+]
+
+# Add production domain if available
+production_domain = os.getenv("FRONTEND_URL")
+if production_domain:
+    allowed_origins.append(production_domain)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -15,7 +32,15 @@ app.add_middleware(
 
 @app.get("/")
 def home():
-    return {"message": "SafeWalk Backend Running 🚀"}
+    return {
+        "message": "SafeWalk Backend Running 🚀",
+        "status": "healthy",
+        "version": "1.0.0"
+    }
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
 
 # MAIN API
 @app.get("/route")

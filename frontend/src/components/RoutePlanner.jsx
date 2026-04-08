@@ -207,7 +207,9 @@ export default function RoutePlanner({ setSafestRoute, setShortestRoute, setSafe
       const start = await getCoordinates(startPlace);
       const end = await getCoordinates(endPlace);
 
-      const res = await axios.get("http://localhost:8000/route", {
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
+      const res = await axios.get(`${apiUrl}/route`, {
         params: {
           start_lat: start.lat,
           start_lon: start.lon,
