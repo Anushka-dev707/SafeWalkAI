@@ -216,6 +216,7 @@ export default function RoutePlanner({ setSafestRoute, setShortestRoute, setSafe
           end_lat: end.lat,
           end_lon: end.lon,
         },
+        timeout: 600000, // 10 minute timeout for first map load
       });
 
       setSafestRoute(res.data.safest_route);
@@ -233,8 +234,14 @@ export default function RoutePlanner({ setSafestRoute, setShortestRoute, setSafe
       });
 
     } catch (err) {
-      console.error(err);
-      alert("Location not found or backend error!");
+      console.error("Error details:", err);
+      if (err.code === "ECONNABORTED") {
+        alert("Request timed out. Backend is taking longer than usual (loading map data). Please try again.");
+      } else if (err.response?.status === 500) {
+        alert("Backend error. Check browser console for details.");
+      } else {
+        alert("Location not found or backend error!");
+      }
     } finally {
       setLoading(false);
     }
