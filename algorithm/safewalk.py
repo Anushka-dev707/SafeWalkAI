@@ -87,17 +87,24 @@ def get_safest_route(start_lat, start_lon, end_lat, end_lon, G):
 
     # Calculate average safety score of the route
     total_safety = 0
+    total_distance = 0  # in meters
+    
     for i in range(len(safest_path) - 1):
         u = safest_path[i]
         v = safest_path[i + 1]
         edge_data = G.get_edge_data(u, v)
         if edge_data:
             total_safety += edge_data[0].get('safety_weight', 0.5)
+            total_distance += edge_data[0].get('length', 0)  # length in meters
 
     avg_safety = total_safety / max(len(safest_path) - 1, 1)
 
     # Convert to score out of 10 (lower weight = safer = higher score)
     safety_score = round((1 - avg_safety) * 10, 1)
+
+    # Calculate time (average walking speed: 1.4 m/s = 5 km/h)
+    walking_speed = 1.4  # meters per second
+    time_minutes = round(total_distance / walking_speed / 60, 1)
 
     # Convert node IDs to coordinates
     coordinates = []
@@ -112,6 +119,9 @@ def get_safest_route(start_lat, start_lon, end_lat, end_lon, G):
         "end": {"lat": end_lat, "lon": end_lon},
         "total_stops": len(coordinates),
         "safety_score": safety_score,
+        "distance_m": round(total_distance, 1),  # distance in meters
+        "distance_km": round(total_distance / 1000, 2),  # distance in kilometers
+        "time_minutes": time_minutes,
         "route": coordinates
     }
 

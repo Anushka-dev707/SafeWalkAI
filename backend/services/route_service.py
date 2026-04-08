@@ -71,6 +71,18 @@ def get_routes(start_lat, start_lon, end_lat, end_lon):
     end_node = ox.nearest_nodes(G, end_lon, end_lat)
     shortest_path = nx.shortest_path(G, start_node, end_node, weight='length')
 
+    # Calculate distance and time for shortest route
+    shortest_distance = 0
+    for i in range(len(shortest_path) - 1):
+        u = shortest_path[i]
+        v = shortest_path[i + 1]
+        edge_data = G.get_edge_data(u, v)
+        if edge_data:
+            shortest_distance += edge_data[0].get('length', 0)
+
+    walking_speed = 1.4  # meters per second
+    shortest_time_minutes = round(shortest_distance / walking_speed / 60, 1)
+
     shortest_coords = []
     for node in shortest_path:
         shortest_coords.append({
@@ -79,9 +91,13 @@ def get_routes(start_lat, start_lon, end_lat, end_lon):
         })
 
     return {
-    "safest_route": safest['route'],
-    "shortest_route": shortest_coords,
-    "safest_length": safest['total_stops'],
-    "shortest_length": len(shortest_coords),
-    "safety_score": safest['safety_score']  # ← yeh add karo
+        "safest_route": safest['route'],
+        "shortest_route": shortest_coords,
+        "safest_length": safest['total_stops'],
+        "shortest_length": len(shortest_coords),
+        "safety_score": safest['safety_score'],
+        "safest_distance_km": safest['distance_km'],
+        "safest_time_minutes": safest['time_minutes'],
+        "shortest_distance_km": round(shortest_distance / 1000, 2),
+        "shortest_time_minutes": shortest_time_minutes
     }

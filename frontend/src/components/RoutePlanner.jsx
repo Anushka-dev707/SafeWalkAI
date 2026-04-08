@@ -178,7 +178,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-export default function RoutePlanner({ setSafestRoute, setShortestRoute, setSafetyScore }) {
+export default function RoutePlanner({ setSafestRoute, setShortestRoute, setSafetyScore, setRouteInfo }) {
   const [startPlace, setStartPlace] = useState("");
   const [endPlace, setEndPlace] = useState("");
   const [loading, setLoading] = useState(false);
@@ -219,6 +219,12 @@ export default function RoutePlanner({ setSafestRoute, setShortestRoute, setSafe
       setSafestRoute(res.data.safest_route);
       setShortestRoute(res.data.shortest_route);
       setSafetyScore(res.data.safety_score);
+      setRouteInfo({
+        safest_distance_km: res.data.safest_distance_km,
+        safest_time_minutes: res.data.safest_time_minutes,
+        shortest_distance_km: res.data.shortest_distance_km,
+        shortest_time_minutes: res.data.shortest_time_minutes
+      });
 
       document.getElementById("map-section")?.scrollIntoView({
         behavior: "smooth",

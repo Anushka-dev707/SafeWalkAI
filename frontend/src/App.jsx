@@ -117,6 +117,7 @@ function App() {
   const [safestRoute, setSafestRoute] = useState([]);
   const [shortestRoute, setShortestRoute] = useState([]);
   const [safetyScore, setSafetyScore] = useState(null);
+  const [routeInfo, setRouteInfo] = useState(null);
 
   return (
     <div className="app-bg">
@@ -127,13 +128,24 @@ function App() {
           setSafestRoute={setSafestRoute}
           setShortestRoute={setShortestRoute}
           setSafetyScore={setSafetyScore}
+          setRouteInfo={setRouteInfo}
         />
 
-        {/* Safety Score Box */}
+        {/* Compact Route Info Bar */}
         {safetyScore !== null && (
-          <div className="score-box">
-            <p>🛡️ Safety Score: <strong>{safetyScore} / 10</strong></p>
-            <p>🟢 Green = Safest Route &nbsp;|&nbsp; 🔴 Red = Shortest Route</p>
+          <div className="route-info-bar">
+            <div className="info-badge safest">
+              <span className="badge-label">🛡️ Safe</span>
+              <span className="badge-value">{routeInfo?.safest_distance_km} km</span>
+              <span className="badge-time">{routeInfo?.safest_time_minutes} min</span>
+              <span className="badge-score">Score: {safetyScore}/10</span>
+            </div>
+            <div className="divider"></div>
+            <div className="info-badge shortest">
+              <span className="badge-label">⚡ Fast</span>
+              <span className="badge-value">{routeInfo?.shortest_distance_km} km</span>
+              <span className="badge-time">{routeInfo?.shortest_time_minutes} min</span>
+            </div>
           </div>
         )}
 

@@ -312,15 +312,25 @@ function ArrowDecorator({ route, color }) {
 export default function MapView({ safestRoute, shortestRoute }) {
   return (
     <div id="map-section">
+      <div className="map-legend">
+        <div className="map-legend-item">
+          <div className="map-legend-color safest"></div>
+          <span>🛡️ Safest Route</span>
+        </div>
+        <div className="map-legend-item">
+          <div className="map-legend-color shortest"></div>
+          <span>⚡ Shortest Route</span>
+        </div>
+      </div>
       <MapContainer center={[28.61, 77.20]} zoom={12} className="map">
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-        {/* Shortest Route — Red */}
+        {/* Shortest Route — Orange */}
         {shortestRoute.length > 0 && (
           <Polyline
             key={"shortest-" + shortestRoute.length}
             positions={shortestRoute.map(p => [p.lat, p.lon])}
-            color="red"
+            color="#ff6b35"
             weight={3}
           />
         )}
@@ -330,7 +340,7 @@ export default function MapView({ safestRoute, shortestRoute }) {
           <Polyline
             key={"safest-" + safestRoute.length}
             positions={safestRoute.map(p => [p.lat, p.lon])}
-            color="green"
+            color="#1f7a63"
             weight={4}
           />
         )}
@@ -352,7 +362,7 @@ export default function MapView({ safestRoute, shortestRoute }) {
 
         {/* Arrows */}
         <ArrowDecorator route={safestRoute} color="#1f7a63" />
-        <ArrowDecorator route={shortestRoute} color="#cc0000" />
+        <ArrowDecorator route={shortestRoute} color="#ff6b35" />
 
       </MapContainer>
     </div>
