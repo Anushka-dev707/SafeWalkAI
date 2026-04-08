@@ -54,14 +54,22 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '../../algorithm'))
 from safewalk import load_graph, get_safest_route
 import networkx as nx
 
-# Load graph once when server starts
-print("Loading Delhi map... ⏳")
-G = load_graph()
-print("Graph ready! ✅")
+# Lazy load graph - only load on first request to save memory
+G = None
+
+def ensure_graph_loaded():
+    global G
+    if G is None:
+        print("Loading Delhi map... ⏳")
+        G = load_graph()
+        print("Graph ready! ✅")
+    return G
 
 
 def get_routes(start_lat, start_lon, end_lat, end_lon):
-
+    # Ensure graph is loaded before processing
+    G = ensure_graph_loaded()
+    
     # Safest route — tumhara algorithm
     safest = get_safest_route(start_lat, start_lon, end_lat, end_lon, G)
 
