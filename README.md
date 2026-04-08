@@ -108,22 +108,26 @@ SafeWalk AI is a full-stack web application that helps users find the **safest w
 ---
 
 ## 📁 Project Structure
+
+```
 SafeWalk/
 │
-├── frontend/ # React frontend
-│ ├── src/
-│ └── package.json
+├── frontend/              # React frontend
+│   ├── src/
+│   └── package.json
 │
-├── backend/ # FastAPI backend
-│ ├── main.py
-│ ├── services/
-│ └── requirements.txt
+├── backend/               # FastAPI backend
+│   ├── main.py
+│   ├── services/
+│   └── requirements.txt
 │
-├── algorithm/ # Safety scoring logic
-│ ├── safewalk.py
-│ ├── dataset.csv
+├── algorithm/             # Safety scoring logic
+│   ├── safewalk.py
+│   └── dataset.csv
 │
 └── README.md
+```
+
 
 
 ---
