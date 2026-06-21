@@ -1,0 +1,2 @@
+# Railway will auto-detect the Dockerfile in backend/
+# No configuration needed - just push and deploy!
