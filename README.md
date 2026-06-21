@@ -108,6 +108,12 @@ npm run dev
 
 ---
 
+# 🎥 Demo Video
+
+Watch SafeWalk AI in action:
+
+[▶️ Click here to watch the demo](https://drive.google.com/file/d/1QN4s9n7w4ryKlKV9l4oRQ6UuKs28zG_u/view?usp=sharing)
+
 
 ## 🤝 Contributors
 
